@@ -1,0 +1,108 @@
+%This is a LaTeX template for homework assignments
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage[margin=1 in]{geometry}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\newcommand\tab[1][1cm]{\hspace*{#1}}
+
+\begin{document}
+
+\section*{CS146 Winter 2018 - Problem Set 4}
+Name: Tianyang Zhang
+\\SID: 404743024
+
+
+\begin{enumerate}%starts the numbering
+
+\item Boosting
+\begin{enumerate}
+    \item $D_0 = 0.1$
+    \\Best learners are $f_1 = [x>2]$ and $f2 = [y>5]$
+    \\$\epsilon_{x1}=0.2$ and $\epsilon_{x2}=0.3$
+    \\$\alpha_0 = \frac{1}{2}log_2\frac{1-\epsilon}{\epsilon}=\frac{1}{2}log_2\frac{0.8}{0.2} = 1$
+    \item Answer on the table
+    \item $D_1(i) = \frac{1}{10Z_0}$
+    $\begin{cases} $$2^{-1} \tab{} $$ \textnormal{if} \,\,\, y_i = h_t(x) 
+    \\ $$2^{1} \tab{} $$ \textnormal{if} \,\,\, y_i \neq h_t(x)
+    \end{cases}$
+    \\The values of $Z_0 = \frac{8}{20Z_0} + \frac{2}{5Z_0} = 1$
+    \\Thus, $D_1(i) = $
+    $\begin{cases} $$0.0625 \tab{} $$ \textnormal{if} \,\,\, y_i = h_t(x) 
+    \\ $$0.25 \tab{} $$ \textnormal{if} \,\,\, y_i \neq h_t(x)
+    \end{cases}$
+    \\New best learners are $f_1 = [x>10]$ and $f2 = [y>11]$, weighted sum for both cases are $\epsilon_{f1} = 1 \times 0.25 + 4 \times 0.0625 = 0.25$ and $\epsilon_{f2} = 0 \times 0.25 + 2 \times 0.0625 = 0.3825$
+    \\$\alpha_1 = \frac{1}{2}log_2\frac{1-\epsilon_{f2}}{\epsilon_{f2}}=\frac{1}{2}log_2\frac{0.75}{0.25} = 0.79$
+    \item $H(x) = sgn(1 \times [x>2] + 0.79 \times [y>11])$
+    \newline
+    \begin{center}
+      \begin{tabular}{|c|c||c|c|c|c||c|c|c|c|}
+        \hline
+        & & \multicolumn{4}{c||}{Hypothesis 1}
+        & \multicolumn{4}{c|}{Hypothesis 2} \\
+        \cline{3-10}
+        {\em i} & Label & $D_0$ & $f_1 \equiv $ & $f_2 \equiv $ & $h_1\equiv$ & $D_1$ &  $f_1 \equiv $ & $f_2 \equiv $ & $h_2 \equiv $ \\
+        & & & [$x > 2$] & [$y > 4$] & [$f_1$] & & [$x > 10$] & [$y > 11$] & [$f_2$] \\
+
+              \tiny{(1)} & \tiny{(2)} & \tiny{(3)} & \tiny{(4)} &  \tiny{(5)} & \tiny{(6)} & \tiny{(7)} & \tiny{(8)} & \tiny{(9)} & \tiny{(10)}\\
+                    \hline \hline
+                          {\em 1} & $-$ & $0.1$ & $-$ & $+$ & $-$ & $0.0625$ & $-$ & $-$ & $-$ \\
+                                \hline
+                                      {\em 2} & $-$ & $0.1$ & $-$ & $-$ & $-$ & $0.0625$ & $-$ & $-$ & $-$ \\
+                                            \hline
+                                                  {\em 3} & $+$ & $0.1$ & $+$ & $+$ & $+$ & $0.0625$ & $-$ & $-$ & $-$ \\
+                                                        \hline
+                                                              {\em 4} & $-$ & $0.1$ & $-$ & $-$ & $-$ & $0.0625$ & $-$ & $-$ & $-$ \\
+                                                                    \hline
+                                                                          {\em 5} & $-$ & $0.1$ & $-$ & $+$ & $-$ & $0.0625$ & $-$ & $+$ & $+$ \\
+                                                                                \hline
+                                                                                      {\em 6} & $-$ & $0.1$ & $+$ & $+$ & $+$ & $0.25$ & $-$ & $-$ & $-$ \\
+                                                                                            \hline
+                                                                                                  {\em 7} & $+$ & $0.1$ & $+$ & $+$ & $+$ & $0.0625$ & $+$ & $-$ & $-$ \\
+                                                                                                        \hline
+                                                                                                              {\em 8} & $-$ & $0.1$ & $-$ & $-$ & $-$ & $0.0625$ & $-$ & $-$ & $-$ \\
+                                                                                                                    \hline
+                                                                                                                          {\em 9} & $+$ & $0.1$ & $-$ & $+$ & $-$ & $0.25$ & $-$ & $+$ & $+$ \\
+                                                                                                                                \hline
+                                                                                                                                      {\em 10} & $+$ & $0.1$ & $+$ & $+$ & $+$ & $0.0625$ & $-$ & $-$ & $-$ \\
+                                                                                                                                            \hline
+                                                                                                                                            \end{tabular}
+      \end{center}
+\end{enumerate}
+
+
+\item Multi-class classification
+\begin{enumerate}
+    \item Classifiers
+    \begin{enumerate}
+        \item One vs All : $k$ classifiers
+        \\ All vs All : $\binom{k}{2}$ = $\frac{k(k-1)}{2}$
+        \item One vs All : $m$ samples
+        \\ All vs All : $\frac{2m}{k}$ samples
+        \item  One vs All : we choose labels that achieves highest score.
+        \\ All vs All: Apply all classifiers and allow those classifiers to vote. 
+        \item One vs All : Time complexity O(mk)
+        \\ All vs All: O($\frac{2m}{k} \times \frac{k(k-1)}{2}$) = O(mk)
+    \end{enumerate}
+   \item Since they both has the same time complexity, we need to find other parameters to define which one is better. I think, the implementation of one vs all is easier compare to all vs all, thus I will prefer one vs all method. In addition, one vs all only needs k classifiers, while all vs all needs at least k$^2$ classifiers.
+   \item Since complexity of Kernel Perceptron is $O(m^2)$, it will change our analysis before. 
+   \\For one vs all it will become $O(m^2k)$
+   \\For all vs all it will become $O(\frac{4m^2}{k^2} \times \frac{k(k-1)}{2}) = O(m^2)$  
+   \\Thus, based on the time complexity that we counted above, we know that all vs all is more poreferable since it is faster that one vs all.
+   \item Since complexity of magical black box is $O(dn^2)$, it will change our analysis before. 
+   \\For one vs all it will become $O(dm^2k)$
+   \\For all vs all it will become $O(\frac{4dm^2}{k^2} \times \frac{k(k-1)}{2}) = O(dm^2)$  
+   \\Thus, based on the time complexity that we counted above, we know that all vs all is more preferable since it is faster that one vs all. 
+   \item Since complexity of magical black box is $O(d^2n)$, it will change our analysis before. 
+   \\For one vs all it will become $O(d^2mk)$
+   \\For all vs all it will become $O(\frac{4d^2m}{k^2} \times \frac{k(k-1)}{2}) = O(d^2mk)$  
+   \\Since the time complexity is the same, so their efficiency is the same, and we could not really pick which one is better.
+   \item Using \textbf{counting} method, in order to do majority vote, we need to run the algorithm on each classifier. Thus, 
+   \begin{center}
+       $\frac{m(m-1)}{2} = O(m^2)$
+   \end{center}
+   On the other hand, \textbf{knockout} method will eliminate loser and only care about the winner, thus, time complexity is $O(m)$
+\end{enumerate}
+\end{enumerate}%ends the numbering
+\end{document}

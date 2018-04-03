@@ -1,0 +1,101 @@
+\documentclass[11pt]{article}
+
+\usepackage{course}
+\begin{document}
+
+\ctitle{1}{Decision trees and k-Nearest Neighbors}{Jan 30, 2018 at 11:59 pm}
+\author{}
+\date{}
+\vspace{-1in}
+\maketitle
+\vspace{-0.75in}
+
+\blfootnote{Parts of this assignment are adapted from course material by Andrea Danyluk (Williams), Tom Mitchell and Maria-Florina Balcan (CMU), Stuart Russell (UC Berkeley), Carlos Guestrin (UW) and Jessica Wu (Harvey Mudd).}
+
+\ifsoln
+\else
+\section*{Submission instructions}
+\begin{itemize}
+\item 
+Submit your solutions electronically on the course Gradescope site as PDF files.
+\item If you plan to typeset your solutions, please use the LaTeX solution template. If you must submit scanned handwritten solutions, please use a black pen on blank white paper and a high-quality scanner app.
+\end{itemize}
+\fi
+
+\ifnotsolution{\newpage}
+\section{Splitting Heuristic for Decision Trees \problemworth{20}}
+Recall that the ID3 algorithm iteratively grows a decision tree from the root downwards. On each iteration, the algorithm replaces one leaf node with an internal node that splits the data based on one decision attribute (or feature). In particular, the ID3 algorithm chooses the split that reduces the entropy the most, but there are other choices. For example, since our goal in the end is to have the lowest error, why not instead choose the split that reduces error the most? In this problem, we will explore one reason why reducing entropy is a better criterion.
+
+Consider the following simple setting. Let us suppose each example is described by $n$ boolean features: $X = \langle X_1, \ldots, X_n \rangle$, where $X_i \in \{0, 1\}$, and where $n \geq 4$. Furthermore, the target function to be learned is $f : X \rightarrow Y$, where $Y = X_1 \vee X_2 \vee X_3$. That is, $Y = 1$ if $X_1 = 1$ or $X_2 = 1$ or $X_3 = 1$, and $Y = 0$ otherwise. Suppose that your training data contains all of the $2^n$ possible examples, each labeled by $f$. For example, when $n = 4$, the data set would be
+\begin{table}[H]
+\centering
+\begin{tabular}{cccc|c}
+$X_1$ & $X_2$ & $X_3$ & $X_4$ & $Y$\\ \hline
+0 & 0 & 0 & 0 & 0\\
+1 & 0 & 0 & 0 & 1\\
+0 & 1 & 0 & 0 & 1\\
+1 & 1 & 0 & 0 & 1\\
+0 & 0 & 1 & 0 & 1\\
+1 & 0 & 1 & 0 & 1\\
+0 & 1 & 1 & 0 & 1\\
+1 & 1 & 1 & 0 & 1\\
+\end{tabular}
+\quad \quad \quad \quad
+\begin{tabular}{cccc|c}
+$X_1$ & $X_2$ & $X_3$ & $X_4$ & $Y$\\ \hline
+0 & 0 & 0 & 1 & 0\\
+1 & 0 & 0 & 1 & 1\\
+0 & 1 & 0 & 1 & 1\\
+1 & 1 & 0 & 1 & 1\\
+0 & 0 & 1 & 1 & 1\\
+1 & 0 & 1 & 1 & 1\\
+0 & 1 & 1 & 1 & 1\\
+1 & 1 & 1 & 1 & 1\\
+\end{tabular}
+\end{table}
+
+\begin{enumerate}
+\item \itemworth{5} How many mistakes does the best $1$-leaf decision tree make over the $2^n$ training examples? (The $1$-leaf decision tree does not split the data even once. Make sure you answer for the general case when $n \geq 4$.)
+
+\item \itemworth{5} Is there a split that reduces the number of mistakes by at least one? (That is, is there a decision tree with $1$ internal node with fewer mistakes than your answer to part (a)?) Why or why not?
+
+\item \itemworth{5} What is the entropy of the output label $Y$ for the $1$-leaf decision tree (no splits at all)?
+
+\item \itemworth{5} Is there a split that reduces the entropy of the output $Y$ by a non-zero amount? If so, what is it, and what is the resulting conditional entropy of $Y$ given this split?
+
+\end{enumerate}
+
+\section{Entropy and Information \problemworth{5}}
+The entropy of a Bernoulli (Boolean 0/1) random variable $X$ with $p(X = 1) = q$ is given by
+\begin{equation*}
+B(q) = - q \log q - (1 - q) \log(1 - q).
+\end{equation*}
+Suppose that a set $S$ of examples contains $p$ positive examples and $n$ negative examples. The entropy of $S$ is defined as $H(S) = B\left(\frac{p}{p+n}\right)$.
+\begin{enumerate}
+\item \itemworth{5} Based on an attribute $X_j$, we split our examples into $k$ disjoint subsets $S_k$, with $p_k$ positive and $n_k$ negative examples in each. If the ratio $\tfrac{p_k}{p_k + n_k}$ is the same for all $k$, show that the information gain of this attribute is 0.
+
+\end{enumerate}
+
+\section{k-Nearest Neighbors and Cross-validation \problemworth{15}}
+In the following questions you will consider a $k$-nearest neighbor classifier using Euclidean
+distance metric on a binary classification task. 
+We assign the class of the test point to be the
+class of the majority of the $k$ nearest neighbors. 
+Note that a point can be its own neighbor.
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.45]{knn_figure.png}
+    \caption{Dataset for KNN binary classification task.}
+    \label{fig:knn}
+\end{figure}
+
+\begin{enumerate}
+    \item \itemworth{5} What value of $k$ minimizes the training set error for this dataset? What is
+the resulting training error?
+    \item \itemworth{5} Why might using too large values $k$ be bad in this dataset? Why might too
+small values of k also be bad?
+    \item \itemworth{5} What value of $k$ minimizes leave-one-out cross-validation error for this
+dataset? What is the resulting error?
+\end{enumerate}
+\input{coding.tex}
+\end{document}
